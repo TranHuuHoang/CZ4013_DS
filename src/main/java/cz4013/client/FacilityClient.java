@@ -105,7 +105,12 @@ public class FacilityClient {
         System.out.println("1. Move 1 timeslot earlier");
         System.out.println("2. Move 1 timeslot later");
         int offset = sc.nextInt();
-        
+
+        if (offset != 1 && offset != 2){
+            System.out.println("Failed to change this booking timeslot with reason: Invalid choice!\n");
+            return;
+        }
+
         ChangeBookingResponse response = client.request(
             "changeBooking",
             new ChangeBookingRequest(name, id, offset),
