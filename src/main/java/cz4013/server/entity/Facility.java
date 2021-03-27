@@ -45,7 +45,7 @@ public class Facility {
         return this.bookings;
     }
     
-    public void ChangeBooking(String id, int offset){
+    public void changeBooking(String id, int offset){
         String day = (String)this.bookings.get(id)[0];
         int timeslot = (int)this.bookings.get(id)[1];
         // Offset = 1 => advance 1 timeslot

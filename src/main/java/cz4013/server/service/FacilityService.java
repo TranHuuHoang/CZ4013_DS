@@ -118,7 +118,7 @@ public class FacilityService {
             return ChangeBookingResponse.failed("This timeslot is not available!");
         }
         
-        facility.ChangeBooking(request.id, request.offset);
+        facility.changeBooking(request.id, request.offset);
         db.store(
             request.facilityName,
             facility
