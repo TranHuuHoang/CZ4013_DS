@@ -6,6 +6,7 @@
 package cz4013.server.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -60,6 +61,8 @@ public class Facility {
             this.getAvailability(day).add(timeslot);
             this.bookings.put(id, new Object[]{day, newTimeslot}); 
         }
+
+        Collections.sort(getAvailability(day));
     }
 
     public void cancelBooking(String id){
@@ -68,6 +71,8 @@ public class Facility {
 
         getAvailability(day).add(timeslot);
         this.bookings.remove(id);
+
+        Collections.sort(getAvailability(day));
     }
     
     public String stringFormat(int timeslot){
