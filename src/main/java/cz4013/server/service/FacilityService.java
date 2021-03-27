@@ -8,20 +8,8 @@ package cz4013.server.service;
 import cz4013.server.entity.Day;
 import cz4013.server.entity.Facility;
 import cz4013.server.storage.Database;
-import cz4013.shared.request.AddFacilityRequest;
-import cz4013.shared.request.BookingRequest;
-import cz4013.shared.request.ChangeBookingRequest;
-import cz4013.shared.request.MonitorRequest;
-import cz4013.shared.request.QueryFacilityRequest;
-import cz4013.shared.response.AddFacilityResponse;
-import cz4013.shared.response.BookingResponse;
-import cz4013.shared.response.ChangeBookingResponse;
-import cz4013.shared.response.MonitorStatusResponse;
-import cz4013.shared.response.MonitorUpdateResponse;
-import cz4013.shared.response.QueryFacilityResponse;
-import cz4013.shared.response.Response;
-import cz4013.shared.response.ResponseHeader;
-import cz4013.shared.response.Status;
+import cz4013.shared.request.*;
+import cz4013.shared.response.*;
 import cz4013.shared.rpc.Transport;
 import java.net.SocketAddress;
 import java.time.Instant;
@@ -125,6 +113,26 @@ public class FacilityService {
         );
         broadcast(String.format("Change booking timeslot successful! New booking slot at: %s", facility.stringFormat(newTimeslot)));
         return new ChangeBookingResponse(true, "");
+    }
+
+    public CancelBookingResponse processCancelBooking(CancelBookingRequest request){
+        Facility facility = db.query(request.facilityName);
+        if (facility == null){
+            return CancelBookingResponse.failed("This facility does not exist!");
+        }
+        if (!facility.getBooking().containsKey(request.id)){
+            return CancelBookingResponse.failed("Invalid confirmation ID!");
+        }
+
+        int timeslot = (int)facility.getBooking().get(request.id)[1];
+
+        facility.cancelBooking(request.id);
+        db.store(
+                request.facilityName,
+                facility
+        );
+        broadcast(String.format("Change booking timeslot successful! The booking slot at: %s is now free", facility.stringFormat(timeslot)));
+        return new CancelBookingResponse(true, "");
     }
     
     public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {

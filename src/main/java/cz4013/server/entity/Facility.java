@@ -61,6 +61,14 @@ public class Facility {
             this.bookings.put(id, new Object[]{day, newTimeslot}); 
         }
     }
+
+    public void cancelBooking(String id){
+        String day = (String)this.bookings.get(id)[0];
+        int timeslot = (int)this.bookings.get(id)[1];
+
+        getAvailability(day).add(timeslot);
+        this.bookings.remove(id);
+    }
     
     public String stringFormat(int timeslot){
         return String.format("%02d:%02d - %02d:%02d", 8 + (timeslot-1)*2 , 0, 8 + timeslot*2, 0);

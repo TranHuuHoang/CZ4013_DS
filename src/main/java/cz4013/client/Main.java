@@ -28,7 +28,8 @@ public class Main {
       "3: Book a timeslot\n" +
       "4: Change a booked timeslot\n" +
       "5: Monitor the availability of a facility\n" +
-      "6: Print the list of options\n" +
+      "6: Cancel a booking\n" +
+      "7: Print the list of options\n" +
       "0: Stop the service\n";
 
     FacilityClient facilityClient = new FacilityClient(new Client(
@@ -58,6 +59,9 @@ public class Main {
             facilityClient.runMonitor();
             break;
           case 6:
+            facilityClient.runCancelBooking();
+            break;
+          case 7:
             System.out.println(options);
             break;
           case 0:

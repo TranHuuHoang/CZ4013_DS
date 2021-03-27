@@ -32,8 +32,9 @@ public class Main {
       .bind("queryFacility", svc::processQueryFacility, new QueryFacilityRequest() {})
       .bind("booking", svc::processBooking, new BookingRequest() {})
       .bind("changeBooking", svc::processChangeBooking, new ChangeBookingRequest() {})
-      .bind("monitor", svc::processMonitor, new MonitorRequest() {});
-  
+      .bind("monitor", svc::processMonitor, new MonitorRequest() {})
+      .bind("cancelBooking", svc::processCancelBooking, new CancelBookingRequest() {});
+
     for (; ; ) {
       try (RawMessage req = server.recv()) {
         if (Math.random() < packetLossRate) {

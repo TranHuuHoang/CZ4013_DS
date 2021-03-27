@@ -5,18 +5,9 @@
  */
 package cz4013.client;
 
-import cz4013.shared.request.AddFacilityRequest;
-import cz4013.shared.request.BookingRequest;
-import cz4013.shared.request.ChangeBookingRequest;
-import cz4013.shared.request.MonitorRequest;
-import cz4013.shared.request.QueryFacilityRequest;
-import cz4013.shared.response.AddFacilityResponse;
-import cz4013.shared.response.BookingResponse;
-import cz4013.shared.response.ChangeBookingResponse;
-import cz4013.shared.response.MonitorStatusResponse;
-import cz4013.shared.response.MonitorUpdateResponse;
-import cz4013.shared.response.QueryFacilityResponse;
-import cz4013.shared.response.Response;
+import cz4013.shared.request.*;
+import cz4013.shared.response.*;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -124,7 +115,29 @@ public class FacilityClient {
         }
         
     }
-    
+
+    public void runCancelBooking(){
+        System.out.println("Enter the facility's name:");
+        sc.nextLine(); //consuming \n from previous prints
+        String name = sc.nextLine();
+        System.out.println("Enter booking confirmation ID:");
+        //sc.nextLine(); //consuming \n from previous print
+        String id = sc.nextLine();
+
+        CancelBookingResponse response = client.request(
+                "cancelBooking",
+                new CancelBookingRequest(name, id),
+                new Response<CancelBookingResponse>() {}
+        );
+
+        if (response.success) {
+            System.out.printf("Successfully cancel the booking timeslot\n");
+        } else {
+            System.out.printf("Failed to change this booking timeslot with reason: %s\n", response.errorMessage);
+        }
+
+    }
+
     public void runMonitor() {
         System.out.println("Enter the facility's name:");
         //sc.nextLine(); //consuming \n from previous print
