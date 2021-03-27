@@ -13,11 +13,7 @@ import cz4013.shared.response.*;
 import cz4013.shared.rpc.Transport;
 import java.net.SocketAddress;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  *
@@ -133,6 +129,36 @@ public class FacilityService {
         );
         broadcast(String.format("Change booking timeslot successful! The booking slot at: %s is now free", facility.stringFormat(timeslot)));
         return new CancelBookingResponse(true, "");
+    }
+
+    public ShiftBookingResponse processShiftBooking(ShiftBookingRequest request){
+        Facility facility = db.query(request.facilityName);
+        if (facility == null){
+            return ShiftBookingResponse.failed("This facility does not exist!");
+        }
+        if (!facility.getBooking().containsKey(request.id)){
+            return ShiftBookingResponse.failed("Invalid confirmation ID!");
+        }
+
+        String day = (String)facility.getBooking().get(request.id)[0];
+        int timeslot = (int)facility.getBooking().get(request.id)[1];
+
+        List<String> weekDays = Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
+
+        int currentDayIdx = weekDays.indexOf(day);
+        String nextDay = weekDays.get((currentDayIdx + 1) % 7);
+
+        if(!facility.getAvailability(nextDay).contains(timeslot)){
+            return ShiftBookingResponse.failed("This timeslot is not available in the next day!");
+        }
+
+        facility.shiftBooking(request.id);
+        db.store(
+                request.facilityName,
+                facility
+        );
+        broadcast(String.format("Successfully shift booking timeslot at: %s of %s to %s", facility.stringFormat(timeslot), day, nextDay));
+        return new ShiftBookingResponse(true, "");
     }
     
     public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {

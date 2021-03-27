@@ -5,9 +5,7 @@
  */
 package cz4013.server.entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  *
@@ -63,6 +61,29 @@ public class Facility {
         }
 
         Collections.sort(getAvailability(day));
+    }
+
+    public void shiftBooking(String id){
+        String day = (String)this.bookings.get(id)[0];
+        int timeslot = (int)this.bookings.get(id)[1];
+        // Offset = 1 => advance 1 timeslot
+        // Offset = 2 => postpone 1 timeslot
+        List<String> weekDays = Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
+
+        int currentDayIdx = weekDays.indexOf(day);
+        String nextDay = weekDays.get((currentDayIdx + 1) % 7);
+
+        if(!this.getAvailability(nextDay).contains(timeslot)){
+            return;
+        }
+        else{
+            this.getAvailability(nextDay).remove(new Integer(timeslot));
+            this.getAvailability(day).add(timeslot);
+            this.bookings.put(id, new Object[]{nextDay, timeslot});
+        }
+
+        Collections.sort(getAvailability(day));
+        Collections.sort(getAvailability(nextDay));
     }
 
     public void cancelBooking(String id){

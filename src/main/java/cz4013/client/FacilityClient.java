@@ -138,6 +138,28 @@ public class FacilityClient {
 
     }
 
+    public void runShiftBooking(){
+        System.out.println("Enter the facility's name:");
+        sc.nextLine(); //consuming \n from previous prints
+        String name = sc.nextLine();
+        System.out.println("Enter booking confirmation ID:");
+        //sc.nextLine(); //consuming \n from previous print
+        String id = sc.nextLine();
+
+        ShiftBookingResponse response = client.request(
+                "shiftBooking",
+                new ShiftBookingRequest(name, id),
+                new Response<ShiftBookingResponse>() {}
+        );
+
+        if (response.success) {
+            System.out.printf("Successfully shift the booking timeslot to the next day\n");
+        } else {
+            System.out.printf("Failed to change this booking timeslot with reason: %s\n", response.errorMessage);
+        }
+
+    }
+
     public void runMonitor() {
         System.out.println("Enter the facility's name:");
         //sc.nextLine(); //consuming \n from previous print

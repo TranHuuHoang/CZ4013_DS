@@ -33,7 +33,8 @@ public class Main {
       .bind("booking", svc::processBooking, new BookingRequest() {})
       .bind("changeBooking", svc::processChangeBooking, new ChangeBookingRequest() {})
       .bind("monitor", svc::processMonitor, new MonitorRequest() {})
-      .bind("cancelBooking", svc::processCancelBooking, new CancelBookingRequest() {});
+      .bind("cancelBooking", svc::processCancelBooking, new CancelBookingRequest() {})
+      .bind("shiftBooking", svc::processShiftBooking, new ShiftBookingRequest() {});
 
     for (; ; ) {
       try (RawMessage req = server.recv()) {
