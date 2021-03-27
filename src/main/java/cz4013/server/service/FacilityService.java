@@ -48,13 +48,13 @@ public class FacilityService {
         // Initialize timeslots
         HashMap<Day, ArrayList<Integer>> initialAvailability = new HashMap<>();
         ArrayList<Integer> listTimeSlot = new ArrayList<>();
-    
-        for(int i = 1; i <= 5; i++){
-            listTimeSlot.add(i);
-        }
 
         for (Day day : Day.values()){
+            for(int i = 1; i <= 5; i++){
+                listTimeSlot.add(i);
+            }
             initialAvailability.put(day, listTimeSlot);
+            listTimeSlot = new ArrayList<>();
         }
         
         db.store(
