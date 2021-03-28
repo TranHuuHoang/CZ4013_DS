@@ -1,20 +1,20 @@
 package cz4013.server.rpc;
 
-import cz4013.shared.container.BufferPool;
-import cz4013.shared.container.LruCache;
-import cz4013.shared.container.PooledByteBuffer;
-import cz4013.shared.request.RequestHeader;
-import cz4013.shared.request.Request;
-import cz4013.shared.response.Response;
-import cz4013.shared.response.Status;
-import cz4013.shared.rpc.RawMessage;
+import cz4013.common.container.BufferPool;
+import cz4013.common.container.LruCache;
+import cz4013.common.container.PooledByteBuffer;
+import cz4013.common.request.RequestHeader;
+import cz4013.common.request.Request;
+import cz4013.common.response.Response;
+import cz4013.common.response.ResponseStatus;
+import cz4013.common.rpc.RawMessage;
 import org.junit.Test;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static cz4013.shared.serialization.Serializer.serialize;
+import static cz4013.common.serialization.Serializer.serialize;
 import static org.junit.Assert.*;
 
 public class RouterTest {
@@ -36,7 +36,7 @@ public class RouterTest {
       serialize(req, buf.get());
       Response<Wrapper> resp = (Response<Wrapper>) r.route(new RawMessage(new InetSocketAddress(80), buf));
 
-      assertEquals(Status.OK, resp.header.status);
+      assertEquals(ResponseStatus.OK, resp.header.status);
       assertEquals(req.header.uuid, resp.header.uuid);
       assertEquals(req.body.x, resp.body.get().x);
     }
@@ -55,7 +55,7 @@ public class RouterTest {
       serialize(req, buf.get());
       Response resp = r.route(new RawMessage(new InetSocketAddress(80), buf));
 
-      assertEquals(Status.NOT_FOUND, resp.header.status);
+      assertEquals(ResponseStatus.NOT_FOUND, resp.header.status);
       assertEquals(req.header.uuid, resp.header.uuid);
       assertFalse(resp.body.isPresent());
     }

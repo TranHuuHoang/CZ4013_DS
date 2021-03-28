@@ -1,17 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz4013.server.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
-/**
- *
- * @author Dell
- */
 public class Facility {
     private String name;
     private HashMap<Day, ArrayList<Integer>> availability;
@@ -45,7 +35,7 @@ public class Facility {
         return this.bookings;
     }
     
-    public void ChangeBooking(String id, int offset){
+    public void changeBooking(String id, int offset){
         String day = (String)this.bookings.get(id)[0];
         int timeslot = (int)this.bookings.get(id)[1];
         // Offset = 1 => advance 1 timeslot
@@ -60,6 +50,41 @@ public class Facility {
             this.getAvailability(day).add(timeslot);
             this.bookings.put(id, new Object[]{day, newTimeslot}); 
         }
+
+        Collections.sort(getAvailability(day));
+    }
+
+    public void shiftBooking(String id){
+        String day = (String)this.bookings.get(id)[0];
+        int timeslot = (int)this.bookings.get(id)[1];
+        // Offset = 1 => advance 1 timeslot
+        // Offset = 2 => postpone 1 timeslot
+        List<String> weekDays = Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
+
+        int currentDayIdx = weekDays.indexOf(day);
+        String nextDay = weekDays.get((currentDayIdx + 1) % 7);
+
+        if(!this.getAvailability(nextDay).contains(timeslot)){
+            return;
+        }
+        else{
+            this.getAvailability(nextDay).remove(new Integer(timeslot));
+            this.getAvailability(day).add(timeslot);
+            this.bookings.put(id, new Object[]{nextDay, timeslot});
+        }
+
+        Collections.sort(getAvailability(day));
+        Collections.sort(getAvailability(nextDay));
+    }
+
+    public void cancelBooking(String id){
+        String day = (String)this.bookings.get(id)[0];
+        int timeslot = (int)this.bookings.get(id)[1];
+
+        getAvailability(day).add(timeslot);
+        this.bookings.remove(id);
+
+        Collections.sort(getAvailability(day));
     }
     
     public String stringFormat(int timeslot){
