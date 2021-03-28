@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz4013.server.entity;
 
 import java.util.*;
 
-/**
- *
- * @author Dell
- */
 public class Facility {
     private String name;
     private HashMap<Day, ArrayList<Integer>> availability;
