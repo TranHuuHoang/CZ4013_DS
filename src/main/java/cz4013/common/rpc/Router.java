@@ -1,10 +1,9 @@
-package cz4013.server.rpc;
+package cz4013.common.rpc;
 
 import cz4013.common.container.LruCache;
 import cz4013.common.request.RequestHeader;
 import cz4013.common.response.Response;
 import cz4013.common.response.ResponseStatus;
-import cz4013.common.rpc.RawMessage;
 import cz4013.common.marshalling.MarshallingException;
 
 import java.net.SocketAddress;
@@ -48,7 +47,7 @@ public class Router {
     return this;
   }
 
-  private Response<?> routeUncached(RawMessage req, RequestHeader header) {
+  private Response<?> routeUncached(Message req, RequestHeader header) {
     try {
       Route route = routes.get(header.method);
       if (route == null) {
@@ -67,7 +66,7 @@ public class Router {
     }
   }
 
-  public Response<?> route(RawMessage req) {
+  public Response<?> route(Message req) {
     RequestHeader header = unmarshall(new RequestHeader() {}, req.payload.get());
     return cache.get(header.uuid).orElseGet(() -> {
       Response<?> resp = routeUncached(req, header);

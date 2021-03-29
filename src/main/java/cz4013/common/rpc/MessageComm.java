@@ -10,11 +10,11 @@ import java.net.SocketAddress;
 
 import static cz4013.common.marshalling.Marshaller.marshall;
 
-public class Transport {
+public class MessageComm {
   DatagramSocket socket;
   BufferPool bufferPool;
 
-  public Transport(DatagramSocket socket, BufferPool bufferPool) {
+  public MessageComm(DatagramSocket socket, BufferPool bufferPool) {
     this.socket = socket;
     this.bufferPool = bufferPool;
   }
@@ -29,13 +29,13 @@ public class Transport {
     }
   }
 
-  public RawMessage receive() {
+  public Message receive() {
     PooledByteBuffer buf = bufferPool.take();
     byte[] rawBuf = buf.get().array();
     DatagramPacket packet = new DatagramPacket(rawBuf, rawBuf.length);
     try {
       socket.receive(packet);
-      return new RawMessage(packet.getSocketAddress(), buf);
+      return new Message(packet.getSocketAddress(), buf);
     } catch (Exception e) {
       buf.close();
       throw new RuntimeException(e);

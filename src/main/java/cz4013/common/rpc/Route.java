@@ -1,4 +1,4 @@
-package cz4013.server.rpc;
+package cz4013.common.rpc;
 
 import java.net.SocketAddress;
 import java.util.function.BiFunction;

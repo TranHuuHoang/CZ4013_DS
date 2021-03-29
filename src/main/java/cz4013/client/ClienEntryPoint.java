@@ -5,7 +5,7 @@ import cz4013.client.communication.FacilityClientWrapper;
 import cz4013.client.exceptions.FailedRequestException;
 import cz4013.client.exceptions.NoResponseException;
 import cz4013.common.container.BufferPool;
-import cz4013.common.rpc.Transport;
+import cz4013.common.rpc.MessageComm;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -38,7 +38,7 @@ public class ClienEntryPoint {
       "0: Stop the service\n";
 
     FacilityClientWrapper facilityClient = new FacilityClientWrapper(new Client(
-      new Transport(socket, new BufferPool(8192, 1024)),
+      new MessageComm(socket, new BufferPool(8192, 1024)),
       new InetSocketAddress(serverHost, serverPort), maxAttempts));
 
     Scanner sc = new Scanner(System.in);

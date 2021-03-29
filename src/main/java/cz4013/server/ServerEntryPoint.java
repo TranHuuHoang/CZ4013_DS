@@ -1,13 +1,13 @@
 package cz4013.server;
 
-import cz4013.server.rpc.Router;
+import cz4013.common.rpc.Router;
 import cz4013.server.service.FacilityService;
 import cz4013.common.container.BufferPool;
 import cz4013.common.container.LruCache;
 import cz4013.common.request.reqbody.*;
 import cz4013.common.response.Response;
-import cz4013.common.rpc.RawMessage;
-import cz4013.common.rpc.Transport;
+import cz4013.common.rpc.Message;
+import cz4013.common.rpc.MessageComm;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -23,7 +23,7 @@ public class ServerEntryPoint {
     double packetLossRate = Double.parseDouble(env.getOrDefault("PACKET_LOSS_RATE", "0.0"));
 
     BufferPool pool = new BufferPool(8192, 1024);
-    Transport server = new Transport(new DatagramSocket(new InetSocketAddress(host, port)), pool);
+    MessageComm server = new MessageComm(new DatagramSocket(new InetSocketAddress(host, port)), pool);
     System.out.printf("Listening on udp://%s:%d\n", host, port);
 
     FacilityService svc = new FacilityService(server);
@@ -37,7 +37,7 @@ public class ServerEntryPoint {
       .bind("shiftBooking", svc::processShiftBooking, new ShiftBookingRequestBody() {});
 
     while (true) {
-      try (RawMessage req = server.receive()) {
+      try (Message req = server.receive()) {
         if (Math.random() < packetLossRate) {
           System.out.printf("Dropped a request from %s.\n", req.remote);
           continue;

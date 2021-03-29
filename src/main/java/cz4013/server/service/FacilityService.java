@@ -6,18 +6,18 @@ import cz4013.server.storage.Database;
 import cz4013.common.request.reqbody.*;
 import cz4013.common.response.*;
 import cz4013.common.response.respbody.*;
-import cz4013.common.rpc.Transport;
+import cz4013.common.rpc.MessageComm;
 import java.net.SocketAddress;
 import java.time.Instant;
 import java.util.*;
 
 public class FacilityService {
     private Database db = new Database();
-    private Transport transport;
+    private MessageComm messageComm;
     private Map<SocketAddress, Instant> listeners = new HashMap<>();
     
-    public FacilityService(Transport transport){
-        this.transport = transport;
+    public FacilityService(MessageComm messageComm){
+        this.messageComm = messageComm;
     }
     
     public AddFacilityResponseBody processAddFacility(AddFacilityRequestBody request){
@@ -168,7 +168,7 @@ public class FacilityService {
             Optional.of(new MonitorUpdateResponseBody(info))
         );
         listeners.forEach((socketAddress, x) -> {
-            transport.send(socketAddress, resp);
+            messageComm.send(socketAddress, resp);
         });
     }
 

@@ -6,8 +6,8 @@ import cz4013.common.request.Request;
 import cz4013.common.request.RequestHeader;
 import cz4013.common.response.Response;
 import cz4013.common.response.ResponseStatus;
-import cz4013.common.rpc.RawMessage;
-import cz4013.common.rpc.Transport;
+import cz4013.common.rpc.Message;
+import cz4013.common.rpc.MessageComm;
 
 import java.io.InterruptedIOException;
 import java.net.SocketAddress;
@@ -20,12 +20,12 @@ import java.util.function.Consumer;
 import static cz4013.common.marshalling.Unmarshaller.unmarshall;
 
 public class Client {
-  private final Transport transport;
+  private final MessageComm messageComm;
   private final int maxTryAttempts;
   private final SocketAddress serverAddress;
 
-  public Client(Transport transport, SocketAddress serverAddress, int maxTryAttempts) {
-    this.transport = transport;
+  public Client(MessageComm messageComm, SocketAddress serverAddress, int maxTryAttempts) {
+    this.messageComm = messageComm;
     this.serverAddress = serverAddress;
     this.maxTryAttempts = maxTryAttempts;
   }
@@ -35,8 +35,8 @@ public class Client {
 
     for (int numTriesLeft = maxTryAttempts; numTriesLeft > 0; --numTriesLeft) {
       try {
-        transport.send(serverAddress, new Request<>(new RequestHeader(id, method), reqBody));
-        try (RawMessage rawResp = transport.receive()) {
+        messageComm.send(serverAddress, new Request<>(new RequestHeader(id, method), reqBody));
+        try (Message rawResp = messageComm.receive()) {
           Response<RespBody> resp = unmarshall(respObj, rawResp.payload.get());
           if (!resp.header.uuid.equals(id)) {
             continue;
@@ -69,7 +69,7 @@ public class Client {
         if (Instant.now().isAfter(end)) {
           return;
         }
-        try (RawMessage msg = transport.receive()) {
+        try (Message msg = messageComm.receive()) {
           unmarshall(respObj, msg.payload.get()).body.ifPresent(callback);
         } catch (RuntimeException e) {
           if (e.getCause() instanceof SocketTimeoutException) {
