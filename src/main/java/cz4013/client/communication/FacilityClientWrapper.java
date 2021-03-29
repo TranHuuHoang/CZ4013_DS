@@ -59,7 +59,7 @@ public class FacilityClientWrapper {
         System.out.println("3. 12:00 - 14:00");
         System.out.println("4. 14:00 - 16:00");
         System.out.println("5. 16:00 - 18:00");
-        int slot = sc.nextInt();
+        int slot = Integer.parseInt(sc.nextLine());
         
         BookingResponseBody response = client.request(
             "booking",
@@ -82,7 +82,7 @@ public class FacilityClientWrapper {
         System.out.println("Choose how to change the booked slot:");
         System.out.println("1. Move 1 timeslot earlier");
         System.out.println("2. Move 1 timeslot later");
-        int offset = sc.nextInt();
+        int offset = Integer.parseInt(sc.nextLine());
 
         if (offset != 1 && offset != 2){
             System.out.println("Failed to change this booking timeslot with reason: Invalid choice!\n");
@@ -147,7 +147,7 @@ public class FacilityClientWrapper {
         System.out.println("Enter the facility's name:");
         String name = sc.nextLine();
         System.out.print("Monitor interval (s) = ");
-        int interval = sc.nextInt();
+        int interval = Integer.parseInt(sc.nextLine());
         MonitorStatusResponseBody status = client.request(
             "monitor",
             new MonitorRequestBody(name, interval),

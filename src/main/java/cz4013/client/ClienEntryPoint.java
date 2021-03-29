@@ -45,7 +45,7 @@ public class ClienEntryPoint {
     boolean shouldStop = false;
     System.out.print(options);
     while (!shouldStop) {
-      int userChoice = sc.nextInt();
+      int userChoice = Integer.parseInt(sc.nextLine());
       try {
         switch (userChoice) {
           case 1:
