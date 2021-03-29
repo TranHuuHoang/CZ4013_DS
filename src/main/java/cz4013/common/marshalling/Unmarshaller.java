@@ -1,4 +1,4 @@
-package cz4013.common.serialization;
+package cz4013.common.marshalling;
 
 import one.util.streamex.StreamEx;
 
@@ -12,12 +12,12 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static cz4013.common.serialization.Utils.serializableFields;
+import static cz4013.common.marshalling.Utils.marshallableFields;
 
-public class Deserializer {
+public class Unmarshaller {
   public static Map<String, Class> EMPTY_TYPE_MAP = new HashMap<>();
   
-  public static <T> T deserialize(T obj, ByteBuffer buf) {
+  public static <T> T unmarshall(T obj, ByteBuffer buf) {
     buf.order(ByteOrder.LITTLE_ENDIAN);
     buf.clear();
     try {
@@ -25,7 +25,7 @@ public class Deserializer {
       assert currClass.isAnonymousClass() : "The given object must be created with anonymous class syntax.";
       return (T) inputStruct(currClass.getGenericSuperclass(), buf, EMPTY_TYPE_MAP);
     } catch (BufferOverflowException e) {
-      throw new SerializingException("Data is corrupted", e);
+      throw new MarshallingException("Data is corrupted", e);
     }
   }
 
@@ -41,11 +41,11 @@ public class Deserializer {
     }
 
     Object obj = currInstance(currClass);
-    if (obj instanceof Serializable) {
-      ((Serializable) obj).deserialize(buffer);
+    if (obj instanceof Marshallable) {
+      ((Marshallable) obj).unmarshall(buffer);
     } else {
       Map<String, Class> finalTypeMap = typeMap;
-      serializableFields(currClass)
+      marshallableFields(currClass)
         .forEach(field -> read(obj, field, buffer, finalTypeMap));
     }
 
@@ -79,7 +79,7 @@ public class Deserializer {
           return false;
 
         default:
-          throw new SerializingException(
+          throw new MarshallingException(
             String.format("Unexpected byte, %d when reading a bool value at offset %d", b, buffer.position())
           );
       }
@@ -138,7 +138,7 @@ public class Deserializer {
             ));
 
           default:
-            throw new SerializingException(
+            throw new MarshallingException(
               String.format("Unexpected tag %d while reading an optional value at offset %d", b, buffer.position())
             );
         }
@@ -154,7 +154,7 @@ public class Deserializer {
 
         int read = buffer.position() - pos;
         if (read != length) {
-          throw new SerializingException(
+          throw new MarshallingException(
             String.format(
               "Mismatch collection length, expected %d bytes, read %d bytes at offset %d.",
               length,
@@ -174,7 +174,7 @@ public class Deserializer {
       int i = buffer.get();
       Object[] c = currClass.getEnumConstants();
       if (i < 0 || i > c.length) {
-        throw new SerializingException(
+        throw new MarshallingException(
           String.format("Invalid ordinal %d of %s at offset %d.", i, currClass.getName(), buffer.position())
         );
       }

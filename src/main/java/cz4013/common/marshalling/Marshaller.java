@@ -1,4 +1,4 @@
-package cz4013.common.serialization;
+package cz4013.common.marshalling;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -6,28 +6,28 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
-import static cz4013.common.serialization.Utils.resetBuffer;
-import static cz4013.common.serialization.Utils.serializableFields;
+import static cz4013.common.marshalling.Utils.resetBuffer;
+import static cz4013.common.marshalling.Utils.marshallableFields;
 
-public class Serializer {
+public class Marshaller {
 
-  public static ByteBuffer serialize(Object o, ByteBuffer buffer) {
+  public static ByteBuffer marshall(Object o, ByteBuffer buffer) {
     resetBuffer(buffer);
     try {
       outputStruct(o, buffer);
       return buffer;
     } catch (BufferOverflowException e) {
-      throw new SerializingException("Buffer has not enough space.", e);
+      throw new MarshallingException("Buffer has not enough space.", e);
     }
   }
 
   public static void outputStruct(Object o, ByteBuffer buffer) {
     int pos = buffer.position();
 
-    if (o instanceof Serializable) {
-      ((Serializable) o).serialize(buffer);
+    if (o instanceof Marshallable) {
+      ((Marshallable) o).marshall(buffer);
     } else {
-      serializableFields(o.getClass())
+      marshallableFields(o.getClass())
         .forEach(field -> {
           try {
             write(field.get(o), buffer);
@@ -38,7 +38,7 @@ public class Serializer {
     }
 
 
-    assert pos < buffer.position() : o.getClass().getName() + " is not serializable.";
+    assert pos < buffer.position() : o.getClass().getName() + " is not marshallable.";
   }
 
   public static void write(Object x, ByteBuffer buffer) {

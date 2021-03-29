@@ -5,7 +5,7 @@ import cz4013.common.request.RequestHeader;
 import cz4013.common.response.Response;
 import cz4013.common.response.ResponseStatus;
 import cz4013.common.rpc.RawMessage;
-import cz4013.common.serialization.SerializingException;
+import cz4013.common.marshalling.MarshallingException;
 
 import java.net.SocketAddress;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static cz4013.common.serialization.Deserializer.deserialize;
+import static cz4013.common.marshalling.Unmarshaller.unmarshall;
 
 public class Router {
   private Map<String, Route> routes = new HashMap<>();
@@ -55,10 +55,10 @@ public class Router {
         return Response.failed(header.uuid, ResponseStatus.NOT_FOUND);
       }
 
-      Object body = deserialize(route.reqBody, req.payload.get().slice());
+      Object body = unmarshall(route.reqBody, req.payload.get().slice());
       Object respBody = route.handler.apply(body, req.remote);
       return Response.ok(header.uuid, respBody);
-    } catch (SerializingException e) {
+    } catch (MarshallingException e) {
       return Response.failed(header.uuid, ResponseStatus.MALFORMED);
     } catch (Exception e) {
       System.out.print(header.uuid);
@@ -68,7 +68,7 @@ public class Router {
   }
 
   public Response<?> route(RawMessage req) {
-    RequestHeader header = deserialize(new RequestHeader() {}, req.payload.get());
+    RequestHeader header = unmarshall(new RequestHeader() {}, req.payload.get());
     return cache.get(header.uuid).orElseGet(() -> {
       Response<?> resp = routeUncached(req, header);
       cache.put(header.uuid, resp);

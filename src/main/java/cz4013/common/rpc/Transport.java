@@ -8,7 +8,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 
-import static cz4013.common.serialization.Serializer.serialize;
+import static cz4013.common.marshalling.Marshaller.marshall;
 
 public class Transport {
   DatagramSocket socket;
@@ -21,7 +21,7 @@ public class Transport {
 
   public <T> void send(SocketAddress dest, T obj) {
     try (PooledByteBuffer buf = bufferPool.take()) {
-      serialize(obj, buf.get());
+      marshall(obj, buf.get());
       byte[] rawBuf = buf.get().array();
       socket.send(new DatagramPacket(rawBuf, rawBuf.length, dest));
     } catch (IOException e) {

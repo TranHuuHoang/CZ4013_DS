@@ -17,7 +17,7 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import static cz4013.common.serialization.Deserializer.deserialize;
+import static cz4013.common.marshalling.Unmarshaller.unmarshall;
 
 public class Client {
   private final Transport transport;
@@ -37,7 +37,7 @@ public class Client {
       try {
         transport.send(serverAddress, new Request<>(new RequestHeader(id, method), reqBody));
         try (RawMessage rawResp = transport.receive()) {
-          Response<RespBody> resp = deserialize(respObj, rawResp.payload.get());
+          Response<RespBody> resp = unmarshall(respObj, rawResp.payload.get());
           if (!resp.header.uuid.equals(id)) {
             continue;
           }
@@ -70,7 +70,7 @@ public class Client {
           return;
         }
         try (RawMessage msg = transport.receive()) {
-          deserialize(respObj, msg.payload.get()).body.ifPresent(callback);
+          unmarshall(respObj, msg.payload.get()).body.ifPresent(callback);
         } catch (RuntimeException e) {
           if (e.getCause() instanceof SocketTimeoutException) {
             continue;

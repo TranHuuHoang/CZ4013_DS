@@ -1,4 +1,4 @@
-package cz4013.common.serialization;
+package cz4013.common.marshalling;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 class Utils {
-  static Stream<Field> serializableFields(Class<?> clazz) {
+  static Stream<Field> marshallableFields(Class<?> clazz) {
     return Arrays.stream(clazz.getFields())
       .filter(field -> {
         int modifiers = field.getModifiers();
