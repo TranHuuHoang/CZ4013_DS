@@ -119,7 +119,7 @@ public class FacilityService {
                 request.facilityName,
                 facility
         );
-        broadcast(String.format("Change booking timeslot successful! The booking slot at: %s is now free", facility.stringFormat(timeslot)));
+        broadcast(String.format("Cancel booking timeslot successful! The booking slot at: %s is now free", facility.stringFormat(timeslot)));
         return new CancelBookingResponseBody(true, "");
     }
 
