@@ -80,13 +80,12 @@ public class ClienEntryPoint {
             break;
         }
       } catch (NoResponseException e) {
-        System.out.println("No response received.");
+        System.out.println(e.noResponseMessage);
       } catch (FailedRequestException e) {
         System.out.printf("Failed to send request with error %s \n", e.status);
       }
     }
 
-    System.out.println("Stopping client...");
+    System.out.println("Client Stopping...");
   }
-
 }

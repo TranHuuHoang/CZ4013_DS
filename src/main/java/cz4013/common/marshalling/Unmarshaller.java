@@ -12,7 +12,7 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static cz4013.common.marshalling.Utils.marshallableFields;
+import static cz4013.common.marshalling.MarshallingUtility.marshallableFields;
 
 public class Unmarshaller {
   public static Map<String, Class> EMPTY_TYPE_MAP = new HashMap<>();

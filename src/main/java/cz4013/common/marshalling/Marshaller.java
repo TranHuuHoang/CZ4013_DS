@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
-import static cz4013.common.marshalling.Utils.resetBuffer;
-import static cz4013.common.marshalling.Utils.marshallableFields;
+import static cz4013.common.marshalling.MarshallingUtility.resetBuffer;
+import static cz4013.common.marshalling.MarshallingUtility.marshallableFields;
 
 public class Marshaller {
 

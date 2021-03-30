@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-class Utils {
+class MarshallingUtility {
   static Stream<Field> marshallableFields(Class<?> clazz) {
     return Arrays.stream(clazz.getFields())
       .filter(field -> {
