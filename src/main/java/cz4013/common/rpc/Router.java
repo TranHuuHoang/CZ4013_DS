@@ -62,11 +62,11 @@ public class Router {
           resp = Response.ok(header.uuid, route.handler.apply(unmarshall(route.reqBody, req.payload.get().slice()), req.remoteSocketAddress));
         }
       } catch (MarshallingException e) {
-        resp = Response.failed(header.uuid, ResponseStatus.MALFORMED);
+        resp = Response.failed(header.uuid, ResponseStatus.MALFUNCTIONED);
       } catch (Exception e) {
         System.out.print(header.uuid);
         e.printStackTrace();
-        resp = Response.failed(header.uuid, ResponseStatus.INTERNAL_ERR);
+        resp = Response.failed(header.uuid, ResponseStatus.INTERNAL_ERROR);
       }
       lruCache.put(header.uuid, resp);
       return resp;

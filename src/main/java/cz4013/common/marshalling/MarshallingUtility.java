@@ -10,10 +10,8 @@ import java.util.stream.Stream;
 class MarshallingUtility {
   static Stream<Field> marshallableFields(Class<?> clazz) {
     return Arrays.stream(clazz.getFields())
-      .filter(field -> {
-        int modifiers = field.getModifiers();
-        return Modifier.isPublic(modifiers) && !Modifier.isTransient(modifiers) && !Modifier.isStatic(modifiers);
-      });
+      .filter(field -> Modifier.isPublic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())
+      );
   }
 
   static void resetBuffer(ByteBuffer buf) {
