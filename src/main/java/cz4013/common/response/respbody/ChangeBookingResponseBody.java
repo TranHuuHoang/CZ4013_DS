@@ -4,8 +4,6 @@ public class ChangeBookingResponseBody {
     public boolean success;
     public String errorMessage;
 
-    public ChangeBookingResponseBody() {
-    }
 
     public ChangeBookingResponseBody(boolean success, String errorMessage) {
         this.success = success;

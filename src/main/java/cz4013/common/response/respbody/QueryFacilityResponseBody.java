@@ -8,9 +8,6 @@ public class QueryFacilityResponseBody {
     public boolean success;
     public String errorMessage;
 
-    public QueryFacilityResponseBody() {
-    }
-
     public QueryFacilityResponseBody(String facilityName, ArrayList<Integer> availability, boolean success, String errorMessage) {
         this.facilityName = facilityName;
         this.availability = availability;
