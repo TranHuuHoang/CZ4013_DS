@@ -22,10 +22,10 @@ public class Unmarshaller {
     buf.clear();
     try {
       Class<?> currClass = obj.getClass();
-      assert currClass.isAnonymousClass() : "The given object must be created with anonymous class syntax.";
+      assert currClass.isAnonymousClass() : "The object must be initialized with anonymous class syntax.";
       return (T) inputStruct(currClass.getGenericSuperclass(), buf, EMPTY_TYPE_MAP);
     } catch (BufferOverflowException e) {
-      throw new MarshallingException("Data is corrupted", e);
+      throw new MarshallingException("Corrupted Data", e);
     }
   }
 
@@ -56,12 +56,12 @@ public class Unmarshaller {
     try {
       return currClass.newInstance();
     } catch (InstantiationException e) {
-      assert false : "Unable to create an instance, " + currClass.getName() + ". Make sure class indicated is not abstract and has a 0-argument constructor.";
+      assert false : "Unable to create an instance of " + currClass.getName() + ". Please ensure that class is not abstract and has a zero-argument constructor.";
     } catch (IllegalAccessException e) {
-      assert false : "Unable to access " + currClass.getName() + ". Ensure that class is public.";
+      assert false : "Unable to access " + currClass.getName() + ". Please ensure that class has public access specifier.";
     }
 
-    throw new RuntimeException("!!!!");
+    throw new RuntimeException("Run Time Exception!");
   }
 
   public static Object readInput(Type type, ByteBuffer buffer, Map<String, Class> typeMap) {

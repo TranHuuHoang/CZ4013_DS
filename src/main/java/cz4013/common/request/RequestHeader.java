@@ -15,6 +15,11 @@ public class RequestHeader {
   }
 
   @Override
+  public String toString() {
+    return "RequestHeader(" + uuid + ", " + requestMethod + ")";
+  }
+
+  @Override
   public boolean equals(Object obj) {
     if (this == obj) return true;
     if (!(obj instanceof RequestHeader))
@@ -22,11 +27,6 @@ public class RequestHeader {
 
     RequestHeader header = (RequestHeader) obj;
     return Objects.equals(uuid, header.uuid) &&
-      Objects.equals(requestMethod, header.requestMethod);
-  }
-
-  @Override
-  public String toString() {
-    return "RequestHeader(" + uuid + ", " + requestMethod + ")";
+            Objects.equals(requestMethod, header.requestMethod);
   }
 }
