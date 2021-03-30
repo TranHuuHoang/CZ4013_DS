@@ -28,13 +28,13 @@ public class ServerEntryPoint {
 
     FacilityService svc = new FacilityService(server);
     Router r = new Router(new LruCache<>(atMostOnce ? 1024 : 0))
-      .bind("addFacility", svc::processAddFacility, new AddFacilityRequestBody() {})
-      .bind("queryFacility", svc::processQueryFacility, new QueryFacilityRequestBody() {})
-      .bind("booking", svc::processBooking, new BookingRequestBody() {})
-      .bind("changeBooking", svc::processChangeBooking, new ChangeBookingRequestBody() {})
-      .bind("monitor", svc::processMonitor, new MonitorRequestBody() {})
-      .bind("cancelBooking", svc::processCancelBooking, new CancelBookingRequestBody() {})
-      .bind("shiftBooking", svc::processShiftBooking, new ShiftBookingRequestBody() {});
+      .bind("addFacility", svc::doAddFacility, new AddFacilityRequestBody() {})
+      .bind("queryFacility", svc::doQueryFacility, new QueryFacilityRequestBody() {})
+      .bind("booking", svc::doBooking, new BookingRequestBody() {})
+      .bind("changeBooking", svc::doChangeBooking, new ChangeBookingRequestBody() {})
+      .bind("monitor", svc::doMonitor, new MonitorRequestBody() {})
+      .bind("cancelBooking", svc::doCancelBooking, new CancelBookingRequestBody() {})
+      .bind("shiftBooking", svc::doShiftBooking, new ShiftBookingRequestBody() {});
 
     while (true) {
       try (Message req = server.receive()) {

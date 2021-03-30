@@ -20,7 +20,7 @@ public class FacilityService {
         this.messageComm = messageComm;
     }
     
-    public AddFacilityResponseBody processAddFacility(AddFacilityRequestBody request){
+    public AddFacilityResponseBody doAddFacility(AddFacilityRequestBody request){
         // Initialize timeslots
         HashMap<Day, ArrayList<Integer>> initialAvailability = new HashMap<>();
         ArrayList<Integer> listTimeSlot = new ArrayList<>();
@@ -45,7 +45,7 @@ public class FacilityService {
         return new AddFacilityResponseBody(request.facilityName);
     }
     
-    public QueryFacilityResponseBody processQueryFacility(QueryFacilityRequestBody request){
+    public QueryFacilityResponseBody doQueryFacility(QueryFacilityRequestBody request){
         Facility facility = db.query(request.facilityName);
         if (facility == null){
             return QueryFacilityResponseBody.failed("This facility does not exist!");
@@ -54,7 +54,7 @@ public class FacilityService {
         return new QueryFacilityResponseBody(request.facilityName, facility.getAvailability(request.day), true, "");
     }
     
-    public BookingResponseBody processBooking(BookingRequestBody request){
+    public BookingResponseBody doBooking(BookingRequestBody request){
         Facility facility = db.query(request.facilityName);
         if (facility == null){
             return BookingResponseBody.failed("This facility does not exist!");
@@ -75,7 +75,7 @@ public class FacilityService {
         return new BookingResponseBody(id, facility.getAvailability(request.day), true, "");
     }
     
-    public ChangeBookingResponseBody processChangeBooking(ChangeBookingRequestBody request){
+    public ChangeBookingResponseBody doChangeBooking(ChangeBookingRequestBody request){
         Facility facility = db.query(request.facilityName);
         if (facility == null){
             return ChangeBookingResponseBody.failed("This facility does not exist!");
@@ -103,7 +103,7 @@ public class FacilityService {
         return new ChangeBookingResponseBody(true, "");
     }
 
-    public CancelBookingResponseBody processCancelBooking(CancelBookingRequestBody request){
+    public CancelBookingResponseBody doCancelBooking(CancelBookingRequestBody request){
         Facility facility = db.query(request.facilityName);
         if (facility == null){
             return CancelBookingResponseBody.failed("This facility does not exist!");
@@ -123,7 +123,7 @@ public class FacilityService {
         return new CancelBookingResponseBody(true, "");
     }
 
-    public ShiftBookingResponseBody processShiftBooking(ShiftBookingRequestBody request){
+    public ShiftBookingResponseBody doShiftBooking(ShiftBookingRequestBody request){
         Facility facility = db.query(request.facilityName);
         if (facility == null){
             return ShiftBookingResponseBody.failed("This facility does not exist!");
@@ -153,7 +153,7 @@ public class FacilityService {
         return new ShiftBookingResponseBody(true, "");
     }
     
-    public MonitorStatusResponseBody processMonitor(MonitorRequestBody req, SocketAddress remote) {
+    public MonitorStatusResponseBody doMonitor(MonitorRequestBody req, SocketAddress remote) {
         long interval = req.interval;
         listeners.put(remote, Instant.now().plusSeconds(interval));
         System.out.printf("User at %s starts to monitor for %d seconds\n", remote, interval);
