@@ -9,7 +9,7 @@ public class BufferPool {
 
   public BufferPool(int bufferSize, int poolSize) {
     for (int i = 0; i < poolSize; ++i) {
-      putBack(ByteBuffer.allocate(bufferSize));
+      put(ByteBuffer.allocate(bufferSize));
     }
   }
 
@@ -19,7 +19,7 @@ public class BufferPool {
     return new PooledByteBuffer(this, byteBuffer);
   }
 
-  void putBack(ByteBuffer byteBuffer) {
+  void put(ByteBuffer byteBuffer) {
     queue.add(byteBuffer);
   }
 }

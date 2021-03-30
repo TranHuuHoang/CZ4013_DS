@@ -54,12 +54,12 @@ public class Router {
       Response<?> resp;
 
       try {
-        Route route = routeMap.get(header.method);
+        Route route = routeMap.get(header.requestMethod);
         if (route == null) {
           resp = Response.failed(header.uuid, ResponseStatus.NOT_FOUND);
         }
         else {
-          resp = Response.ok(header.uuid, route.handler.apply(unmarshall(route.reqBody, req.payload.get().slice()), req.remote));
+          resp = Response.ok(header.uuid, route.handler.apply(unmarshall(route.reqBody, req.payload.get().slice()), req.remoteSocketAddress));
         }
       } catch (MarshallingException e) {
         resp = Response.failed(header.uuid, ResponseStatus.MALFORMED);

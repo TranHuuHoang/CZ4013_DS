@@ -39,14 +39,14 @@ public class ServerEntryPoint {
     while (true) {
       try (Message req = server.receive()) {
         if (Math.random() < packetLossRate) {
-          System.out.printf("Dropped a request from %s.\n", req.remote);
+          System.out.printf("Dropped a request from %s.\n", req.remoteSocketAddress);
           continue;
         }
         Response<?> resp = r.route(req);
         if (Math.random() < packetLossRate) {
-          System.out.printf("Dropped a response to %s.\n", req.remote);
+          System.out.printf("Dropped a response to %s.\n", req.remoteSocketAddress);
         } else {
-          server.send(req.remote, resp);
+          server.send(req.remoteSocketAddress, resp);
         }
       } catch (Exception e) {
         e.printStackTrace();

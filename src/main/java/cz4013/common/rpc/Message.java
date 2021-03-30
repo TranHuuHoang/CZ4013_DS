@@ -5,11 +5,11 @@ import cz4013.common.container.PooledByteBuffer;
 import java.net.SocketAddress;
 
 public class Message implements AutoCloseable {
-  public SocketAddress remote;
+  public SocketAddress remoteSocketAddress;
   public PooledByteBuffer payload;
 
-  public Message(SocketAddress remote, PooledByteBuffer payload) {
-    this.remote = remote;
+  public Message(SocketAddress remoteSocketAddress, PooledByteBuffer payload) {
+    this.remoteSocketAddress = remoteSocketAddress;
     this.payload = payload;
   }
 

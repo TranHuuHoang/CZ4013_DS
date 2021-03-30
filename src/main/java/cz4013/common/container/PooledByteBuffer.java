@@ -17,6 +17,6 @@ public class PooledByteBuffer implements AutoCloseable {
 
   @Override
   public void close() {
-    parent.putBack(byteBuffer);
+    parent.put(byteBuffer);
   }
 }

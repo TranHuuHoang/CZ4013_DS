@@ -3,15 +3,12 @@ package cz4013.common.request;
 import java.util.Objects;
 
 public class Request<ReqBody> {
-  public RequestHeader header;
-  public ReqBody body;
+  public RequestHeader requestHeader;
+  public ReqBody reqBody;
 
-  public Request() {
-  }
-
-  public Request(RequestHeader header, ReqBody body) {
-    this.header = header;
-    this.body = body;
+  public Request(RequestHeader requestHeader, ReqBody reqBody) {
+    this.requestHeader = requestHeader;
+    this.reqBody = reqBody;
   }
 
   @Override
@@ -19,8 +16,8 @@ public class Request<ReqBody> {
     if (this == o) return true;
     if (!(o instanceof Request)) return false;
     Request<?> request = (Request<?>) o;
-    return Objects.equals(header, request.header) &&
-      Objects.equals(body, request.body);
+    return Objects.equals(requestHeader, request.requestHeader) &&
+      Objects.equals(reqBody, request.reqBody);
   }
 }
 

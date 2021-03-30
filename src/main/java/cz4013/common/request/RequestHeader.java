@@ -5,26 +5,28 @@ import java.util.UUID;
 
 public class RequestHeader {
   public UUID uuid;
-  public String method;
+  public String requestMethod;
 
   public RequestHeader() {}
 
-  public RequestHeader(UUID uuid, String method) {
+  public RequestHeader(UUID uuid, String requestMethod) {
     this.uuid = uuid;
-    this.method = method;
+    this.requestMethod = requestMethod;
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof RequestHeader)) return false;
-    RequestHeader header = (RequestHeader) o;
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (!(obj instanceof RequestHeader))
+      return false;
+
+    RequestHeader header = (RequestHeader) obj;
     return Objects.equals(uuid, header.uuid) &&
-      Objects.equals(method, header.method);
+      Objects.equals(requestMethod, header.requestMethod);
   }
 
   @Override
   public String toString() {
-    return "RequestHeader(" + uuid + ", " + method + ")";
+    return "RequestHeader(" + uuid + ", " + requestMethod + ")";
   }
 }

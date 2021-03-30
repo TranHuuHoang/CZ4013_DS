@@ -11,11 +11,11 @@ import java.net.SocketAddress;
 import static cz4013.common.marshalling.Marshaller.marshall;
 
 public class MessageComm {
-  DatagramSocket socket;
+  DatagramSocket datagramSocket;
   BufferPool bufferPool;
 
-  public MessageComm(DatagramSocket socket, BufferPool bufferPool) {
-    this.socket = socket;
+  public MessageComm(DatagramSocket datagramSocket, BufferPool bufferPool) {
+    this.datagramSocket = datagramSocket;
     this.bufferPool = bufferPool;
   }
 
@@ -23,7 +23,7 @@ public class MessageComm {
     try (PooledByteBuffer buf = bufferPool.take()) {
       marshall(obj, buf.get());
       byte[] rawBuf = buf.get().array();
-      socket.send(new DatagramPacket(rawBuf, rawBuf.length, dest));
+      datagramSocket.send(new DatagramPacket(rawBuf, rawBuf.length, dest));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -34,7 +34,7 @@ public class MessageComm {
     byte[] rawBuf = buf.get().array();
     DatagramPacket packet = new DatagramPacket(rawBuf, rawBuf.length);
     try {
-      socket.receive(packet);
+      datagramSocket.receive(packet);
       return new Message(packet.getSocketAddress(), buf);
     } catch (Exception e) {
       buf.close();
