@@ -1,22 +1,22 @@
 **Run**
-- Server `TERM=dumb HOST=<host> PORT=<port> AT_MOST_ONCE=<0|1> PACKET_LOSS_RATE=<0.0-1.0> ./gradlew -q server`.
+- To run server: Download an IDE or use command line to run the file `src/main/java/cz4013/server/ServerEntryPoint.java`.
+  The default config is:
+  ```
+  host=0.0.0.0
+  port=49152 
+  atMostOnce=0
+  packetLossRate=0.0
+  ```
+  In order to change the config, edit the field `host`, `port`, `atMostOnce` and `packetLossRate` inside the `main` function of `src/main/java/cz4013/server/ServerEntryPoint.java`.
+  
+- To run server: Download an IDE or use command line to run the file `src/main/java/cz4013/client/ClienEntryPoint.java`.
   Default config:
   ```
-  HOST=0.0.0.0
-  PORT=12740 
-  AT_MOST_ONCE=0
-  PACKET_LOSS_RATE=0.0
+  clientHost=0.0.0.0
+  clientPort=49153
+  serverHost=127.0.0.1
+  serverPort=49152
+  timeout=5 (sec)
+  maxAttempts=5
   ```
-- Client `TERM=dumb CLIENT_HOST=<host> CLIENT_PORT=<port> SERVER_HOST=<host> SERVER_PORT<port> TIMEOUT_SEC=<seconds> MAX_ATTEMPTS=<attempts>  ./gradlew -q client`.
-  Default config:
-  ```
-  CLIENT_HOST=0.0.0.0
-  CLIENT_PORT=12741
-  SERVER_HOST=127.0.0.1
-  SERVER_PORT=12740
-  TIMEOUT_SEC=5
-  MAX_ATTEMPTS=5
-  ```
-- Client 1 `TERM=dumb CLIENT_PORT=12741 ./gradlew -q client`
-- Client 2 `TERM=dumb CLIENT_PORT=12742 ./gradlew -q client`
-- Test `./gradlew test`
+  In order to change the config, edit the field `clientHost`, `clientPort`, `serverHost`, `serverPort`, `timeout` and `maxAttempts` inside the `main` function of `src/main/java/cz4013/client/ClienEntryPoint.java`.
