@@ -9,7 +9,7 @@
   ```
   In order to change the config, edit the field `host`, `port`, `atMostOnce` and `packetLossRate` inside the `main` function of `src/main/java/cz4013/server/ServerEntryPoint.java`.
   
-- To run server: Download an IDE or use command line to run the file `src/main/java/cz4013/client/ClienEntryPoint.java`.
+- To run client: Download an IDE or use command line to run the file `src/main/java/cz4013/client/ClienEntryPoint.java`.
   Default config:
   ```
   clientHost=0.0.0.0
