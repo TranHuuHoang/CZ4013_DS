@@ -12,15 +12,13 @@ import cz4013.common.rpc.MessageComm;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.util.Map;
 
 public class ServerEntryPoint {
   public static void main(String[] args) throws SocketException {
-    Map<String, String> env = System.getenv();
-    String host = env.getOrDefault("HOST", "0.0.0.0");
-    int port = Integer.parseInt(env.getOrDefault("PORT", "12740"));
-    boolean atMostOnce = Integer.parseInt(env.getOrDefault("AT_MOST_ONCE", "0")) != 0;
-    double packetLossRate = Double.parseDouble(env.getOrDefault("PACKET_LOSS_RATE", "0.0"));
+    String host = "0.0.0.0";
+    int port = Integer.parseInt("49152");
+    boolean atMostOnce = Integer.parseInt("0") != 0;
+    double packetLossRate = Double.parseDouble("0.0");
 
     BufferPool pool = new BufferPool(8192, 1024);
     MessageComm server = new MessageComm(new DatagramSocket(new InetSocketAddress(host, port)), pool);

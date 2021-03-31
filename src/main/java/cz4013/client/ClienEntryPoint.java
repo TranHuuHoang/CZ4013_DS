@@ -11,18 +11,16 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.time.Duration;
-import java.util.Map;
 import java.util.Scanner;
 
 public class ClienEntryPoint {
   public static void main(String[] args) throws SocketException {
-    Map<String, String> env = System.getenv();
-    String clientHost = env.getOrDefault("CLIENT_HOST", "0.0.0.0");
-    String serverHost = env.getOrDefault("SERVER_HOST", "127.0.0.1");
-    int clientPort = Integer.parseInt(env.getOrDefault("CLIENT_PORT", "12741"));
-    int serverPort = Integer.parseInt(env.getOrDefault("SERVER_PORT", "12740"));
-    Duration timeout = Duration.ofSeconds(Integer.parseInt(env.getOrDefault("TIMEOUT_SEC", "5")));
-    int maxAttempts = Integer.parseInt(env.getOrDefault("MAX_ATTEMPTS", "5"));
+    String clientHost = "0.0.0.0";
+    String serverHost = "127.0.0.1";
+    int clientPort = Integer.parseInt("49153");
+    int serverPort = Integer.parseInt("49152");
+    Duration timeout = Duration.ofSeconds(Integer.parseInt("5"));
+    int maxAttempts = Integer.parseInt("5");
     DatagramSocket socket = new DatagramSocket(new InetSocketAddress(clientHost, clientPort));
     socket.setSoTimeout((int) timeout.toMillis());
     String options = "----------------------------------------------------------------\n" +
