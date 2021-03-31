@@ -26,15 +26,15 @@ public class ServerEntryPoint {
     MessageComm server = new MessageComm(new DatagramSocket(new InetSocketAddress(host, port)), pool);
     System.out.printf("Listening on udp://%s:%d\n", host, port);
 
-    FacilityService svc = new FacilityService(server);
-    Router r = new Router(new LruCache<>(atMostOnce ? 1024 : 0))
-      .bind("addFacility", svc::doAddFacility, new AddFacilityRequestBody() {})
-      .bind("queryFacility", svc::doQueryFacility, new QueryFacilityRequestBody() {})
-      .bind("booking", svc::doBooking, new BookingRequestBody() {})
-      .bind("changeBooking", svc::doChangeBooking, new ChangeBookingRequestBody() {})
-      .bind("monitor", svc::doMonitor, new MonitorRequestBody() {})
-      .bind("cancelBooking", svc::doCancelBooking, new CancelBookingRequestBody() {})
-      .bind("shiftBooking", svc::doShiftBooking, new ShiftBookingRequestBody() {});
+    FacilityService facilityService = new FacilityService(server);
+    Router router = new Router(new LruCache<>(atMostOnce ? 1024 : 0))
+      .bind("addFacility", facilityService::doAddFacility, new AddFacilityRequestBody() {})
+      .bind("queryFacility", facilityService::doQueryFacility, new QueryFacilityRequestBody() {})
+      .bind("booking", facilityService::doBooking, new BookingRequestBody() {})
+      .bind("changeBooking", facilityService::doChangeBooking, new ChangeBookingRequestBody() {})
+      .bind("monitor", facilityService::doMonitor, new MonitorRequestBody() {})
+      .bind("cancelBooking", facilityService::doCancelBooking, new CancelBookingRequestBody() {})
+      .bind("shiftBooking", facilityService::doShiftBooking, new ShiftBookingRequestBody() {});
 
     while (true) {
       try (Message req = server.receive()) {
@@ -42,7 +42,7 @@ public class ServerEntryPoint {
           System.out.printf("Dropped a request from %s.\n", req.remoteSocketAddress);
           continue;
         }
-        Response<?> resp = r.route(req);
+        Response<?> resp = router.route(req);
         if (Math.random() < packetLossRate) {
           System.out.printf("Dropped a response to %s.\n", req.remoteSocketAddress);
         } else {
