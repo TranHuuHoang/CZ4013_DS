@@ -8,6 +8,9 @@ public class BookingResponseBody {
     public boolean success;
     public String errorMessage;
 
+    public BookingResponseBody() {
+    }
+
     public BookingResponseBody(String id, ArrayList<Integer> availability, boolean success, String errorMessage) {
         this.id = id;
         this.availability = availability;

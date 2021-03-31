@@ -7,6 +7,8 @@ public class ResponseHeader {
     public UUID uuid;
     public ResponseStatus status;
 
+    public ResponseHeader() {}
+
     public ResponseHeader(UUID uuid, ResponseStatus status) {
         this.uuid = uuid;
         this.status = status;

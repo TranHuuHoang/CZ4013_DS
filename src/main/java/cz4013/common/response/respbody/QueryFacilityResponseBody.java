@@ -15,6 +15,9 @@ public class QueryFacilityResponseBody {
         this.errorMessage = errorMessage;
     }
 
+    public QueryFacilityResponseBody() {
+    }
+
     public static QueryFacilityResponseBody failed(String errorMessage) {
         return new QueryFacilityResponseBody("", new ArrayList<>(), false, errorMessage);
     }

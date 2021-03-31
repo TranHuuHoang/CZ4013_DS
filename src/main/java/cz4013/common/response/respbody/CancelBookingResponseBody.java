@@ -4,6 +4,9 @@ public class CancelBookingResponseBody {
     public boolean success;
     public String errorMessage;
 
+    public CancelBookingResponseBody() {
+    }
+
     public CancelBookingResponseBody(boolean success, String errorMessage) {
         this.success = success;
         this.errorMessage = errorMessage;
